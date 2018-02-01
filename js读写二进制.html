@@ -1,0 +1,50 @@
+<html>  
+  <head>  
+  <title>视频直播</title>  
+  <meta charset="utf-8">  
+  <link href="http://vjs.zencdn.net/5.20.3/video-js.css" rel="stylesheet">  
+  <!-- If you'd like to support IE8 -->  
+  <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>  
+  
+</head>  
+<body>  
+  <h1>直播间</h1>  
+
+
+<script>
+var str = "test!!"
+
+var byteArr = new ArrayBuffer(4 + 2 + 4 + 2 + str.length);   //参数是ArrayBuffer的字节大小。
+var dv = new DataView(byteArr);   //DataView有三个参数，后两个可以缺省；每一个要是ArrayBuffer对象或SharedArrayBuffer对象
+
+//下面的DataView的setUint*和getUint*方法自己去查阅。
+
+dv.setUint32(0, 234, false);
+dv.setUint16(4, 123, false);
+dv.setFloat32(6, 55.66, false);
+
+dv.setUint16(10, str.length, false);   //这个Uint16是表示字符串的字节大小，在写入字符串的时候一定要先写一个Uint16
+for(var i = 0; i < str.length; i++) {
+  dv.setUint8(12 + i, str[i].charCodeAt(0));
+}
+
+
+
+
+var dataView = new DataView(byteArr);
+var int = dataView.getInt32(0, false);
+var short = dataView.getInt16(4, false);
+var float = dataView.getFloat32(6, false);
+var len = dataView.getInt16(10, false);
+
+var str2 = "";
+for(var i = 0; i < len; i++) {
+  str2 = str2 + String.fromCharCode(dv.getUint8(12 + i));
+}
+
+console.log(int, short, float, len);
+console.log("str2", str2);
+
+</script>  
+</body>  
+</html> 
